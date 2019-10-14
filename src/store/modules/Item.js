@@ -1,35 +1,47 @@
-import apiItems from '../../api/apiItem'
-export default{
+import axios from 'axios'
 
-    state: {
-        items: []
-    },
-    getters: {
-        getItem(state){
+export default {
 
-            return state.items
-        }
+  state: {
+    items: [],
+  },
+
+  getters: {
+    getItem: state => state.items,
+  },
+  mutations: {
+    setItems(state, items) {
+      state.items = items
     },
-    mutations: {
-        setItems(state, items){
-            state.items = items
-        },
-        deleteItem(state, id){
-          state.items = state.items.filter(function(item) {
-            return item.id !== id ;
-          });
-        }
-    },
-    actions: {
-      getAllItems({commit}){
-      
-        return apiItems.setItems().then((response) => {
-            commit('setItems', response.data)
-        
-            return response.data
-        }).catch((error) => {
-            throw error
-        })
-      }
+    DELETE_ITEM(state, id) {
+      state.items = state.items.filter(function (item) {
+        return item.id !== id;
+      });
     }
+  },
+  actions: {
+    getAllItems({commit}) {
+      axios
+        .get('https://jsonplaceholder.typicode.com/posts')
+        .then(data => {
+          let items = data.data
+          commit('setItems', items)
+        })
+        .catch((error) => {
+            throw error
+          }
+        )
+    },
+    deleteItem({commit}, id) {
+      axios
+        .delete('https://jsonplaceholder.typicode.com/posts/' + id)
+        .then(data => {
+          commit('DELETE_ITEM', id)
+        })
+        .catch((error) => {
+            throw error
+          }
+        )
+    }
+  }
 }

@@ -5,7 +5,7 @@
         <router-link :to="'/todo/'+item.id ">
           <h3>{{item.title}}</h3>
         </router-link>
-        <button @click="removeTodo(item.id)">&times;</button>
+        <button @click="deleteItem(item.id)">&times;</button>
       </li>
     
     </ul>
@@ -13,34 +13,31 @@
 </template>
 
 <script>
-  import apiItems from '../api/apiItem'
+  import { mapGetters, mapActions} from 'vuex';
+
   export default {
+    props: {
+       type: String,
+       required: true,
+  },
     data: function () {
       return {
         todo: null
       }
     },
     created(){
-      this.$store.dispatch('getAllItems')
+      this.getAllItems()
     },
 
 
   methods: {
-    removeTodo(id){
-      apiItems.deleteItems(id).then((response) => {
-        this.$store.commit('deleteItem' , id)
-        return response
-      }).catch((error) => {
-        throw error
-      })
-    }
+    ...mapActions(['getAllItems' , 'deleteItem']),
   },
-  computed:{
-    getItem(){
-      return this.$store.getters.getItem
-    },
+  computed: {
+    ...mapGetters({
+        getItem: 'getItem'
+    })
   }
-  
 }
 </script>
 <style>

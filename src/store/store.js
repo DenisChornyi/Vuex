@@ -5,7 +5,6 @@ import item from './modules/Item'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  
   modules: {
     item
   }

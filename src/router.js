@@ -11,10 +11,14 @@ const router = new Router({
   routes: [
     {
       path: '/',
+      name: 'list',
+      props: true,
       component: List
     },
     {
       path: '/todo/:id',
+      name: 'todoList',
+      props: true,
       component: ListItem
     }
 
